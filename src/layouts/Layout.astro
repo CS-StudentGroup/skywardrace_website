@@ -8,8 +8,19 @@ interface Props {
 
 const {
   title = "Skyward Race",
-  description = "A pygame-ce arcade racer — and its journey into Godot.",
+  description = "A pixel-art arcade racer built in pygame-ce — and its journey into Godot.",
 } = Astro.props;
+
+const navLinks = [
+  { href: "/", label: "Home", external: false },
+  { href: "/roadmap", label: "Roadmap", external: false },
+  { href: "/versions", label: "Versions", external: false },
+  {
+    href: "https://github.com/CS-StudentGroup/pdc_final_project",
+    label: "GitHub",
+    external: true,
+  },
+];
 ---
 
 <!doctype html>
@@ -20,45 +31,173 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/banner.png" />
+    <meta property="og:type" content="website" />
   </head>
-  <body class="min-h-screen antialiased">
-    <header class="sticky top-0 z-50 backdrop-blur bg-[color:var(--color-bg)]/70 border-b border-white/5">
+  <body class="min-h-screen antialiased flex flex-col">
+    <header class="sticky top-0 z-50 backdrop-blur-sm bg-[color:var(--color-bg)]/85 border-b-4 border-[color:var(--color-ink)]">
       <nav class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="/" class="font-[family-name:var(--font-display)] font-bold tracking-tight">
-          Skyward<span class="text-[color:var(--color-accent)]">Race</span>
+        <a
+          href="/"
+          class="font-bold text-[color:var(--color-gold)] tracking-widest uppercase text-sm hover:text-[color:var(--color-crown)] transition shrink-0"
+          style="font-family: var(--font-display);"
+        >
+          <span class="text-[color:var(--color-sky)]">[</span> Skyward Race <span class="text-[color:var(--color-sky)]">]</span>
         </a>
-        <ul class="flex gap-6 text-sm text-[color:var(--color-muted)]">
-          <li><a href="#about" class="hover:text-white transition">About</a></li>
-          <li><a href="#devlog" class="hover:text-white transition">Godot port</a></li>
-          <li>
-            <a
-              href="https://github.com/Andott1"
-              target="_blank"
-              rel="noopener"
-              class="hover:text-white transition"
-            >
-              GitHub
-            </a>
-          </li>
+
+        <!-- Desktop nav -->
+        <ul
+          class="hidden md:flex gap-4 lg:gap-6 text-xs lg:text-sm uppercase tracking-widest"
+          style="font-family: var(--font-display);"
+        >
+          {
+            navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener" : undefined}
+                  class="text-[color:var(--color-muted)] hover:text-[color:var(--color-sky)] transition"
+                >
+                  &gt; {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
+
+        <!-- Mobile hamburger button -->
+        <button
+          id="nav-toggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          class="md:hidden inline-flex items-center justify-center w-10 h-10 border-2 border-[color:var(--color-ink)] bg-[color:var(--color-bg-elev)] text-[color:var(--color-sky)] hover:text-[color:var(--color-gold)] transition"
+          style="box-shadow: 3px 3px 0 0 var(--color-ink);"
+        >
+          <!-- Hamburger icon -->
+          <svg
+            class="block"
+            data-icon="open"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="20"
+            height="20"
+            fill="currentColor"
+            shape-rendering="crispEdges"
+            aria-hidden="true"
+          >
+            <rect x="2" y="3" width="12" height="2"></rect>
+            <rect x="2" y="7" width="12" height="2"></rect>
+            <rect x="2" y="11" width="12" height="2"></rect>
+          </svg>
+          <!-- Close icon -->
+          <svg
+            class="hidden"
+            data-icon="close"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="20"
+            height="20"
+            fill="currentColor"
+            shape-rendering="crispEdges"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="2" height="2"></rect>
+            <rect x="5" y="5" width="2" height="2"></rect>
+            <rect x="7" y="7" width="2" height="2"></rect>
+            <rect x="9" y="5" width="2" height="2"></rect>
+            <rect x="11" y="3" width="2" height="2"></rect>
+            <rect x="9" y="9" width="2" height="2"></rect>
+            <rect x="11" y="11" width="2" height="2"></rect>
+            <rect x="5" y="9" width="2" height="2"></rect>
+            <rect x="3" y="11" width="2" height="2"></rect>
+          </svg>
+        </button>
       </nav>
+
+      <!-- Mobile dropdown panel -->
+      <div
+        id="mobile-nav"
+        class="hidden md:hidden border-t-2 border-[color:var(--color-ink)] bg-[color:var(--color-bg-elev)]"
+      >
+        <ul
+          class="flex flex-col px-6 py-3 gap-1 text-sm uppercase tracking-widest"
+          style="font-family: var(--font-display);"
+        >
+          {
+            navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener" : undefined}
+                  class="block py-2 text-[color:var(--color-muted)] hover:text-[color:var(--color-sky)] border-b border-white/5 last:border-b-0 transition"
+                >
+                  &gt; {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </header>
 
-    <main>
+    <main class="flex-1">
       <slot />
     </main>
 
-    <footer class="border-t border-white/5 mt-24">
-      <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-[color:var(--color-muted)] flex flex-wrap items-center justify-between gap-2">
-        <span>© {new Date().getFullYear()} Skyward Race</span>
-        <span>Built with Astro + Tailwind</span>
+    <footer class="border-t-4 border-[color:var(--color-ink)] mt-24 bg-[color:var(--color-bg)]/70">
+      <div
+        class="max-w-6xl mx-auto px-6 py-8 text-xs uppercase tracking-widest text-[color:var(--color-muted)] flex flex-wrap items-center justify-between gap-3"
+        style="font-family: var(--font-display);"
+      >
+        <span>&copy; {new Date().getFullYear()} CS-StudentGroup</span>
+        <span class="text-[color:var(--color-sky)]">Press START to continue</span>
+        <span>Astro + Tailwind</span>
       </div>
     </footer>
+
+    <script>
+      const btn = document.getElementById("nav-toggle");
+      const menu = document.getElementById("mobile-nav");
+      const openIcon = btn?.querySelector('[data-icon="open"]');
+      const closeIcon = btn?.querySelector('[data-icon="close"]');
+
+      if (btn && menu) {
+        const setOpen = (open: boolean) => {
+          btn.setAttribute("aria-expanded", String(open));
+          menu.classList.toggle("hidden", !open);
+          openIcon?.classList.toggle("hidden", open);
+          openIcon?.classList.toggle("block", !open);
+          closeIcon?.classList.toggle("hidden", !open);
+          closeIcon?.classList.toggle("block", open);
+        };
+
+        btn.addEventListener("click", () => {
+          const open = btn.getAttribute("aria-expanded") === "true";
+          setOpen(!open);
+        });
+
+        // Close on link click (for in-page nav)
+        menu.querySelectorAll("a").forEach((a) => {
+          a.addEventListener("click", () => setOpen(false));
+        });
+
+        // Close on Escape
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") setOpen(false);
+        });
+
+        // Auto-close when resizing up to desktop
+        const mq = window.matchMedia("(min-width: 768px)");
+        mq.addEventListener("change", (e) => {
+          if (e.matches) setOpen(false);
+        });
+      }
+    </script>
   </body>
 </html>

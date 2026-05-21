@@ -1,22 +1,180 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Pixel Code";
+  src: url("/fonts/PixelCode.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pixel Code";
+  src: url("/fonts/PixelCode-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pixel Code";
+  src: url("/fonts/PixelCode-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pixel Code";
+  src: url("/fonts/PixelCode-ExtraBold.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --color-bg: #0b0d12;
-  --color-bg-elev: #131722;
-  --color-fg: #e7ecf3;
-  --color-muted: #8a94a6;
-  --color-accent: #ffb347;
-  --color-accent-2: #6ea8ff;
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  /* Palette pulled from the game banner */
+  --color-bg: #0a1230;
+  --color-bg-elev: #131c44;
+  --color-bg-2: #1c2860;
+  --color-fg: #e8f1ff;
+  --color-muted: #8aa0d4;
+  --color-ink: #0a0f24;
+  --color-sky: #6ec0ff;
+  --color-sky-light: #b5dcff;
+  --color-gold: #ffc83d;
+  --color-gold-deep: #c9831a;
+  --color-crown: #fdd964;
+
+  --font-display: "Pixel Code", ui-monospace, monospace;
+  --font-body: "Pixel Code", ui-monospace, monospace;
 }
 
 html {
   scroll-behavior: smooth;
+  image-rendering: pixelated;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  /* Subtle pixel grid + starfield using layered radial-gradients */
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.35) 50%, transparent 51%),
+    radial-gradient(2px 2px at 70% 80%, rgba(255, 255, 255, 0.25) 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 70%, rgba(255, 200, 61, 0.35) 50%, transparent 51%),
+    radial-gradient(2px 2px at 85% 15%, rgba(255, 255, 255, 0.3) 50%, transparent 51%),
+    radial-gradient(2px 2px at 10% 85%, rgba(110, 192, 255, 0.4) 50%, transparent 51%),
+    radial-gradient(2px 2px at 55% 10%, rgba(255, 255, 255, 0.2) 50%, transparent 51%),
+    linear-gradient(180deg, #050918 0%, #0a1230 60%, #131c44 100%);
+  background-attachment: fixed;
+  background-size:
+    600px 600px,
+    700px 700px,
+    500px 500px,
+    800px 800px,
+    650px 650px,
+    750px 750px,
+    100% 100%;
+}
+
+/* Pixel-art image scaling */
+img.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Pixel-art button: chunky offset shadow instead of blur */
+.btn-pixel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 3px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  transition: transform 80ms steps(2), box-shadow 80ms steps(2);
+  cursor: pointer;
+}
+.btn-pixel:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 0 var(--color-ink);
+}
+.btn-primary {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+.btn-primary:hover {
+  background: var(--color-crown);
+}
+.btn-secondary {
+  background: var(--color-sky);
+  color: var(--color-ink);
+}
+.btn-secondary:hover {
+  background: var(--color-sky-light);
+}
+
+/* Pixel-art panel */
+.panel-pixel {
+  background: var(--color-bg-elev);
+  border: 3px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  position: relative;
+}
+.panel-pixel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(110, 192, 255, 0.15);
+  pointer-events: none;
+}
+
+/* Chip / status tag */
+.chip-pixel {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border: 2px solid var(--color-ink);
+  box-shadow: 2px 2px 0 0 var(--color-ink);
+}
+
+/* Section heading flourish */
+.heading-pixel {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 3px 3px 0 var(--color-ink);
+  color: var(--color-gold);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Scrollbar — keep it blocky */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-2);
+  border: 2px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sky);
 }

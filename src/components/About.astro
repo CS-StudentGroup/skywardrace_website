@@ -1,56 +1,77 @@
 ---
-const features = [
-  {
-    title: "Real-time multiplayer",
-    body: "Race against others with low-latency networking — the core distributed-systems piece of the project.",
-  },
-  {
-    title: "Spectator mode",
-    body: "Drop in to watch live matches with full camera controls and a results table.",
-  },
-  {
-    title: "Built in pygame-ce",
-    body: "A modern fork of pygame with better performance and SDL2 under the hood.",
-  },
+const stats = [
+  { label: "Players", value: "Up to 5" },
+  { label: "Network", value: "LAN + tunnel" },
+  { label: "Levels", value: "10 procedural" },
+  { label: "Platform", value: "Windows" },
 ];
 ---
 
 <section id="about" class="max-w-6xl mx-auto px-6 py-20">
-  <div class="grid lg:grid-cols-[1fr_1.2fr] gap-12 items-start">
+  <div class="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
     <div>
-      <h2
-        class="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold tracking-tight"
+      <p
+        class="chip-pixel bg-[color:var(--color-gold)] text-[color:var(--color-ink)] mb-4"
+        style="font-family: var(--font-display);"
       >
-        About the game
-      </h2>
-      <p class="mt-4 text-[color:var(--color-muted)] leading-relaxed">
-        Skyward Race started as the final project for CS323 — Parallel and
-        Distributed Computing. It's a small competitive racer that uses
-        client–server networking, with rooms, spectators, and a results
-        screen. The pygame-ce build is the one you can download today.
+        ※ About
       </p>
-      <p class="mt-4 text-[color:var(--color-muted)] leading-relaxed">
-        It's now being ported to Godot 4.6 to grow beyond the original scope —
-        track that journey in the
-        <a href="#devlog" class="text-[color:var(--color-accent)] hover:underline"
-          >Godot port section</a
+      <h2 class="heading-pixel text-3xl sm:text-4xl">What is Skyward Race?</h2>
+      <p
+        class="mt-5 text-[color:var(--color-sky-light)] leading-relaxed text-sm sm:text-base"
+        style="font-family: var(--font-body);"
+      >
+        A 2D pixel-art racer where up to five players climb procedurally
+        generated towers, dodge each other, and grab buff/debuff orbs along
+        the way. Built as the final project for CS323 &mdash; Parallel and
+        Distributed Computing &mdash; the game's heart is real-time
+        server-authoritative UDP networking with rooms, ready-ups, and
+        post-match results.
+      </p>
+      <p
+        class="mt-4 text-[color:var(--color-sky-light)] leading-relaxed text-sm sm:text-base"
+        style="font-family: var(--font-body);"
+      >
+        Currently <strong>LAN-only</strong> &mdash; play over a local network,
+        or expose your room to friends with a tunneling service like <a
+          href="https://playit.gg"
+          target="_blank"
+          rel="noopener"
+          class="text-[color:var(--color-gold)] hover:text-[color:var(--color-crown)] underline decoration-2 underline-offset-4"
+          >playit.gg</a
+        > and direct-join via host:port.
+      </p>
+      <p
+        class="mt-4 text-[color:var(--color-sky-light)] leading-relaxed text-sm sm:text-base"
+        style="font-family: var(--font-body);"
+      >
+        A Godot 4.6 port is in progress &mdash; track it on the <a
+          href="/roadmap"
+          class="text-[color:var(--color-gold)] hover:text-[color:var(--color-crown)] underline decoration-2 underline-offset-4"
+          >roadmap</a
         >.
       </p>
     </div>
 
-    <ul class="grid sm:grid-cols-2 gap-4">
+    <dl class="grid grid-cols-2 gap-3">
       {
-        features.map((f) => (
-          <li class="bg-[color:var(--color-bg-elev)] border border-white/5 rounded-xl p-5">
-            <h3 class="font-[family-name:var(--font-display)] font-semibold text-lg">
-              {f.title}
-            </h3>
-            <p class="mt-2 text-sm text-[color:var(--color-muted)] leading-relaxed">
-              {f.body}
-            </p>
-          </li>
+        stats.map((s) => (
+          <div class="panel-pixel p-4">
+            <dt
+              class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-muted)]"
+              style="font-family: var(--font-display);"
+            >
+              {s.label}
+            </dt>
+            <dd
+              class="mt-2 text-base font-bold text-[color:var(--color-gold)]"
+              style="font-family: var(--font-display);"
+            >
+              {s.value}
+            </dd>
+          </div>
         ))
       }
-    </ul>
+    </dl>
   </div>
 </section>

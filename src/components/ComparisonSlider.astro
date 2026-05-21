@@ -1,0 +1,107 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  before: ImageMetadata;
+  beforeAlt: string;
+  beforeLabel: string;
+  after: ImageMetadata;
+  afterAlt: string;
+  afterLabel: string;
+}
+
+const { before, beforeAlt, beforeLabel, after, afterAlt, afterLabel } =
+  Astro.props;
+---
+
+<div
+  class="comparison-slider relative overflow-hidden select-none"
+  style="--pos: 50%;"
+>
+  <!-- Base layer (before) -->
+  <Image
+    src={before}
+    alt={beforeAlt}
+    widths={[480, 768, 1024]}
+    sizes="(max-width: 1024px) 90vw, 480px"
+    class="pixelated w-full h-auto block"
+  />
+
+  <!-- Top layer (after), clipped from the left -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="clip-path: inset(0 0 0 var(--pos));"
+  >
+    <Image
+      src={after}
+      alt={afterAlt}
+      widths={[480, 768, 1024]}
+      sizes="(max-width: 1024px) 90vw, 480px"
+      class="pixelated w-full h-full object-cover block"
+    />
+  </div>
+
+  <!-- Labels -->
+  <span
+    class="chip-pixel absolute top-3 left-3 bg-[color:var(--color-sky)] text-[color:var(--color-ink)] pointer-events-none"
+    style="font-family: var(--font-display);"
+  >
+    {beforeLabel}
+  </span>
+  <span
+    class="chip-pixel absolute top-3 right-3 bg-[color:var(--color-gold)] text-[color:var(--color-ink)] pointer-events-none"
+    style="font-family: var(--font-display);"
+  >
+    {afterLabel}
+  </span>
+
+  <!-- Handle line -->
+  <div
+    class="absolute top-0 bottom-0 w-[3px] bg-[color:var(--color-ink)] pointer-events-none"
+    style="left: var(--pos); transform: translateX(-50%);"
+  >
+    <span
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-[color:var(--color-gold)] border-[3px] border-[color:var(--color-ink)] flex items-center justify-center text-[color:var(--color-ink)] text-sm font-bold"
+      style="box-shadow: 3px 3px 0 0 var(--color-ink); font-family: var(--font-display);"
+    >
+      ◀▶
+    </span>
+  </div>
+
+  <!-- Range input (transparent, on top) -->
+  <input
+    type="range"
+    min="0"
+    max="100"
+    value="50"
+    aria-label="Drag to compare levels"
+    class="comparison-range absolute inset-0 w-full h-full m-0 cursor-ew-resize opacity-0"
+  />
+</div>
+
+<style>
+  /* Style the range thumb minimally so the cursor extends the full height */
+  .comparison-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 40px;
+    height: 100%;
+  }
+  .comparison-range::-moz-range-thumb {
+    width: 40px;
+    height: 100%;
+    border: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".comparison-slider").forEach((el) => {
+    const range = el.querySelector<HTMLInputElement>(".comparison-range");
+    if (!range) return;
+    const update = () => {
+      el.style.setProperty("--pos", `${range.value}%`);
+    };
+    range.addEventListener("input", update);
+    update();
+  });
+</script>
