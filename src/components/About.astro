@@ -1,0 +1,56 @@
+---
+const features = [
+  {
+    title: "Real-time multiplayer",
+    body: "Race against others with low-latency networking — the core distributed-systems piece of the project.",
+  },
+  {
+    title: "Spectator mode",
+    body: "Drop in to watch live matches with full camera controls and a results table.",
+  },
+  {
+    title: "Built in pygame-ce",
+    body: "A modern fork of pygame with better performance and SDL2 under the hood.",
+  },
+];
+---
+
+<section id="about" class="max-w-6xl mx-auto px-6 py-20">
+  <div class="grid lg:grid-cols-[1fr_1.2fr] gap-12 items-start">
+    <div>
+      <h2
+        class="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold tracking-tight"
+      >
+        About the game
+      </h2>
+      <p class="mt-4 text-[color:var(--color-muted)] leading-relaxed">
+        Skyward Race started as the final project for CS323 — Parallel and
+        Distributed Computing. It's a small competitive racer that uses
+        client–server networking, with rooms, spectators, and a results
+        screen. The pygame-ce build is the one you can download today.
+      </p>
+      <p class="mt-4 text-[color:var(--color-muted)] leading-relaxed">
+        It's now being ported to Godot 4.6 to grow beyond the original scope —
+        track that journey in the
+        <a href="#devlog" class="text-[color:var(--color-accent)] hover:underline"
+          >Godot port section</a
+        >.
+      </p>
+    </div>
+
+    <ul class="grid sm:grid-cols-2 gap-4">
+      {
+        features.map((f) => (
+          <li class="bg-[color:var(--color-bg-elev)] border border-white/5 rounded-xl p-5">
+            <h3 class="font-[family-name:var(--font-display)] font-semibold text-lg">
+              {f.title}
+            </h3>
+            <p class="mt-2 text-sm text-[color:var(--color-muted)] leading-relaxed">
+              {f.body}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

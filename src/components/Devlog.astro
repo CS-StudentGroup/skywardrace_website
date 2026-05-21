@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from "astro:content";
+
+const entries = (await getCollection("devlog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  }),
+);
+
+const statusStyles: Record<string, string> = {
+  planned: "bg-white/5 text-[color:var(--color-muted)] border-white/10",
+  "in-progress":
+    "bg-[color:var(--color-accent)]/10 text-[color:var(--color-accent)] border-[color:var(--color-accent)]/30",
+  done: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
+};
+---
+
+<section id="devlog" class="max-w-6xl mx-auto px-6 py-20">
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+    <div>
+      <h2
+        class="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold tracking-tight"
+      >
+        Godot port progress
+      </h2>
+      <p class="mt-2 text-[color:var(--color-muted)]">
+        Devlog entries from the migration into Godot 4.6.
+      </p>
+    </div>
+  </div>
+
+  <ol class="relative border-l border-white/10 ml-2">
+    {
+      rendered.map(({ entry, Content }) => (
+        <li class="ml-6 mb-10">
+          <span class="absolute -left-[7px] mt-2 w-3.5 h-3.5 rounded-full bg-[color:var(--color-accent)] ring-4 ring-[color:var(--color-bg)]" />
+          <div class="flex items-center gap-3 flex-wrap">
+            <time class="text-xs text-[color:var(--color-muted)] uppercase tracking-wider">
+              {entry.data.date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </time>
+            <span
+              class={`text-[10px] uppercase tracking-wider border rounded-full px-2 py-0.5 ${statusStyles[entry.data.status]}`}
+            >
+              {entry.data.status}
+            </span>
+          </div>
+          <h3 class="font-[family-name:var(--font-display)] text-xl font-semibold mt-2">
+            {entry.data.title}
+          </h3>
+          {entry.data.summary && (
+            <p class="text-[color:var(--color-muted)] mt-1">{entry.data.summary}</p>
+          )}
+          <div class="prose prose-invert prose-sm max-w-none mt-3 text-[color:var(--color-fg)]/90 leading-relaxed">
+            <Content />
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>

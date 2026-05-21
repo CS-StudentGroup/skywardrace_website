@@ -1,0 +1,64 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Skyward Race",
+  description = "A pygame-ce arcade racer — and its journey into Godot.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen antialiased">
+    <header class="sticky top-0 z-50 backdrop-blur bg-[color:var(--color-bg)]/70 border-b border-white/5">
+      <nav class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <a href="/" class="font-[family-name:var(--font-display)] font-bold tracking-tight">
+          Skyward<span class="text-[color:var(--color-accent)]">Race</span>
+        </a>
+        <ul class="flex gap-6 text-sm text-[color:var(--color-muted)]">
+          <li><a href="#about" class="hover:text-white transition">About</a></li>
+          <li><a href="#devlog" class="hover:text-white transition">Godot port</a></li>
+          <li>
+            <a
+              href="https://github.com/Andott1"
+              target="_blank"
+              rel="noopener"
+              class="hover:text-white transition"
+            >
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-white/5 mt-24">
+      <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-[color:var(--color-muted)] flex flex-wrap items-center justify-between gap-2">
+        <span>© {new Date().getFullYear()} Skyward Race</span>
+        <span>Built with Astro + Tailwind</span>
+      </div>
+    </footer>
+  </body>
+</html>
