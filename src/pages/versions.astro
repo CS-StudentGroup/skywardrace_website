@@ -1,0 +1,113 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ReleaseCard from "../components/ReleaseCard.astro";
+import { getReleases, RELEASES_PAGE_URL } from "../lib/releases";
+import { isMilestone } from "../data/milestone-versions";
+
+const releases = await getReleases();
+const latestStableTag = releases.find((r) => !r.prerelease)?.tag_name;
+
+const milestoneReleases = releases.filter((r) => isMilestone(r.tag_name));
+const otherReleases = releases.filter((r) => !isMilestone(r.tag_name));
+---
+
+<Layout
+  title="Versions · Skyward Race"
+  description="All released builds of Skyward Race, with milestone releases highlighted."
+>
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p
+      class="chip-pixel bg-[color:var(--color-gold)] text-[color:var(--color-ink)] mb-4"
+      style="font-family: var(--font-display);"
+    >
+      ◇ Versions
+    </p>
+    <h1 class="heading-pixel text-4xl sm:text-5xl">Download archive</h1>
+    <p
+      class="mt-4 text-[color:var(--color-sky-light)] text-sm sm:text-base max-w-2xl"
+      style="font-family: var(--font-body);"
+    >
+      Every released build of Skyward Race. Milestone releases mark significant
+      moments in the game's history. Data pulled from
+      <a
+        href={RELEASES_PAGE_URL}
+        target="_blank"
+        rel="noopener"
+        class="text-[color:var(--color-gold)] hover:text-[color:var(--color-crown)] underline decoration-2 underline-offset-4"
+      >
+        GitHub releases
+      </a>.
+    </p>
+  </section>
+
+  {
+    releases.length === 0 && (
+      <section class="max-w-6xl mx-auto px-6 pb-24">
+        <div class="panel-pixel p-6">
+          <p
+            class="text-[color:var(--color-muted)] text-sm"
+            style="font-family: var(--font-body);"
+          >
+            Could not load releases at build time. Visit the{" "}
+            <a
+              href={RELEASES_PAGE_URL}
+              target="_blank"
+              rel="noopener"
+              class="text-[color:var(--color-gold)] underline"
+            >
+              releases page
+            </a>{" "}
+            directly.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    milestoneReleases.length > 0 && (
+      <section class="max-w-6xl mx-auto px-6 py-8">
+        <h2 class="heading-pixel text-2xl sm:text-3xl mb-2">
+          ★ Milestone releases
+        </h2>
+        <p
+          class="text-[color:var(--color-sky-light)] text-sm mb-6"
+          style="font-family: var(--font-body);"
+        >
+          The versions that matter.
+        </p>
+        <ol class="space-y-5">
+          {milestoneReleases.map((release) => (
+            <ReleaseCard
+              release={release}
+              latestStableTag={latestStableTag}
+              highlight
+            />
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    otherReleases.length > 0 && (
+      <section class="max-w-6xl mx-auto px-6 py-8 pb-24">
+        <h2 class="heading-pixel text-2xl sm:text-3xl mb-2">All releases</h2>
+        <p
+          class="text-[color:var(--color-sky-light)] text-sm mb-6"
+          style="font-family: var(--font-body);"
+        >
+          Every other build, newest first.
+        </p>
+        <ol class="space-y-5">
+          {otherReleases.map((release) => (
+            <ReleaseCard
+              release={release}
+              latestStableTag={latestStableTag}
+            />
+          ))}
+        </ol>
+      </section>
+    )
+  }
+</Layout>
