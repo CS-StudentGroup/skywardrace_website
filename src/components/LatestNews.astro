@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+
+const entries = (await getCollection("devlog"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const roadmapItems = await getCollection("roadmap");
+const roadmapById = new Map(roadmapItems.map((r) => [r.id, r]));
+---
+
+<section id="latest-news" class="max-w-6xl mx-auto px-6 py-20">
+  <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p
+        class="chip-pixel bg-[color:var(--color-gold)] text-[color:var(--color-ink)] mb-4"
+        style="font-family: var(--font-display);"
+      >
+        ▣ Latest news
+      </p>
+      <h2 class="heading-pixel text-3xl sm:text-4xl">Recent updates</h2>
+    </div>
+    <a href="/roadmap" class="btn-pixel btn-secondary text-xs">
+      ▶ All devlogs
+    </a>
+  </div>
+
+  {
+    entries.length === 0 ? (
+      <div class="panel-pixel p-6">
+        <p
+          class="text-[color:var(--color-muted)] text-sm"
+          style="font-family: var(--font-body);"
+        >
+          No devlog entries yet. Check back soon.
+        </p>
+      </div>
+    ) : (
+      <ol class="grid md:grid-cols-2 gap-5">
+        {entries.map((entry) => {
+          const roadmap = roadmapById.get(entry.data.roadmap.id);
+          const date = entry.data.date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+          return (
+            <li class="panel-pixel p-5">
+              <div class="flex flex-wrap items-center gap-3 mb-3">
+                {roadmap && (
+                  <a
+                    href={`/roadmap/${roadmap.id}`}
+                    class="chip-pixel bg-[color:var(--color-sky)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-sky-light)]"
+                    style="font-family: var(--font-display);"
+                  >
+                    {roadmap.data.title}
+                  </a>
+                )}
+                <time
+                  class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-muted)] ml-auto"
+                  style="font-family: var(--font-display);"
+                >
+                  {date}
+                </time>
+              </div>
+              <h3
+                class="font-bold text-lg uppercase tracking-wide text-[color:var(--color-gold)]"
+                style="font-family: var(--font-display);"
+              >
+                {entry.data.title}
+              </h3>
+              {entry.data.summary && (
+                <p
+                  class="mt-2 text-[color:var(--color-sky-light)] text-sm leading-relaxed"
+                  style="font-family: var(--font-body);"
+                >
+                  {entry.data.summary}
+                </p>
+              )}
+              {roadmap && (
+                <a
+                  href={`/roadmap/${roadmap.id}#${entry.id.split("/").pop()}`}
+                  class="mt-4 inline-block text-[10px] uppercase tracking-[0.25em] text-[color:var(--color-sky)] hover:text-[color:var(--color-sky-light)]"
+                  style="font-family: var(--font-display);"
+                >
+                  Read entry →
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    )
+  }
+</section>

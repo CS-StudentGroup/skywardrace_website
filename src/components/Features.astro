@@ -1,0 +1,178 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import ComparisonSlider from "./ComparisonSlider.astro";
+
+import roomBrowser from "../assets/screenshots/room_browser.png";
+import avatarCustomization from "../assets/screenshots/avatar_customization.png";
+import roomLobby from "../assets/screenshots/room_lobby.png";
+import level1 from "../assets/screenshots/level_1.png";
+import level10 from "../assets/screenshots/level_10.png";
+import buffsDebuffs from "../assets/screenshots/buffs_debuffs.png";
+import spectatorMode from "../assets/screenshots/spectator_mode.png";
+
+interface BaseFeature {
+  label: string;
+  title: string;
+  body: string;
+  placeholder?: boolean;
+}
+
+interface SingleFeature extends BaseFeature {
+  kind: "single";
+  image: ImageMetadata;
+  alt: string;
+}
+
+interface CompareFeature extends BaseFeature {
+  kind: "compare";
+  before: ImageMetadata;
+  beforeAlt: string;
+  beforeLabel: string;
+  after: ImageMetadata;
+  afterAlt: string;
+  afterLabel: string;
+}
+
+type Feature = SingleFeature | CompareFeature;
+
+const features: Feature[] = [
+  {
+    kind: "single",
+    label: "01 · Networking",
+    title: "LAN rooms & direct join",
+    body: "Host on your local network and let players discover the room, or expose it through a tunnel like playit.gg and have friends direct-join by host:port from the room browser.",
+    image: roomBrowser,
+    alt: "Room browser screen listing active multiplayer rooms",
+  },
+  {
+    kind: "single",
+    label: "02 · Identity",
+    title: "Customize your racer",
+    body: "Pick a head, mix model colors, and save your look as a profile. Avatars sync to every other player in the lobby with compressed payloads.",
+    image: avatarCustomization,
+    alt: "Avatar customization screen with character preview and color options",
+  },
+  {
+    kind: "single",
+    label: "03 · Pre-race",
+    title: "Lobby & ready-up",
+    body: "Up to five players per room. Everyone readies up, the host controls countdown start and cancel, and late joiners get the avatar replay.",
+    image: roomLobby,
+    alt: "Pre-race lobby with players listed and ready states shown",
+  },
+  {
+    kind: "compare",
+    label: "04 · Gameplay",
+    title: "10 procedurally generated levels",
+    body: "Climb a tower that's freshly generated every match. Level seeds set platform density, gaps, and orb count — drag the slider to compare the gentle slope of Level 1 with the chaos of Level 10.",
+    before: level1,
+    beforeAlt: "Level 1 layout — sparse platforms and one orb",
+    beforeLabel: "Lv 1",
+    after: level10,
+    afterAlt: "Level 10 layout — dense platforms and multiple orbs",
+    afterLabel: "Lv 10",
+  },
+  {
+    kind: "single",
+    label: "05 · Items",
+    title: "Buff & debuff orbs",
+    body: "Orbs are scattered across each level — grab them for a temporary boost or risk a setback. Higher levels carry more orbs and more variety.",
+    image: buffsDebuffs,
+    alt: "Orbs scattered on a platform with a player picking one up",
+  },
+  {
+    kind: "single",
+    label: "06 · Audience",
+    title: "Spectate after elimination",
+    body: "Get knocked out or cross the finish line first? You stay in the match as a spectator with free camera and the live leaderboard until everyone finishes.",
+    image: spectatorMode,
+    alt: "Spectator view of a live match",
+  },
+];
+---
+
+<section id="features" class="max-w-6xl mx-auto px-6 py-20">
+  <div class="mb-14 text-center">
+    <p
+      class="chip-pixel bg-[color:var(--color-sky)] text-[color:var(--color-ink)] mb-4"
+      style="font-family: var(--font-display);"
+    >
+      ◆ Features
+    </p>
+    <h2 class="heading-pixel text-3xl sm:text-4xl">What's in the game</h2>
+    <p
+      class="mt-4 text-[color:var(--color-sky-light)] text-sm sm:text-base max-w-xl mx-auto"
+      style="font-family: var(--font-body);"
+    >
+      Six systems working together to make every race feel snappy.
+    </p>
+  </div>
+
+  <div class="space-y-20">
+    {
+      features.map((f, i) => {
+        const reverse = i % 2 === 1;
+        return (
+          <div
+            class:list={[
+              "grid lg:grid-cols-2 gap-10 items-center",
+              reverse && "lg:[&>*:first-child]:order-2",
+            ]}
+          >
+            <div class="panel-pixel overflow-hidden relative">
+              {f.kind === "single" ? (
+                <>
+                  <Image
+                    src={f.image}
+                    alt={f.alt}
+                    widths={[480, 768, 1024]}
+                    sizes="(max-width: 1024px) 90vw, 480px"
+                    class="pixelated w-full h-auto block"
+                  />
+                  {f.placeholder && (
+                    <span
+                      class="chip-pixel absolute top-3 right-3 bg-[color:var(--color-muted)] text-[color:var(--color-ink)]"
+                      style="font-family: var(--font-display);"
+                    >
+                      Placeholder
+                    </span>
+                  )}
+                </>
+              ) : (
+                <ComparisonSlider
+                  before={f.before}
+                  beforeAlt={f.beforeAlt}
+                  beforeLabel={f.beforeLabel}
+                  after={f.after}
+                  afterAlt={f.afterAlt}
+                  afterLabel={f.afterLabel}
+                />
+              )}
+            </div>
+            <div>
+              <p
+                class="text-[10px] uppercase tracking-[0.25em] text-[color:var(--color-sky)] mb-3"
+                style="font-family: var(--font-display);"
+              >
+                {f.label}
+              </p>
+              <h3
+                class="text-2xl sm:text-3xl font-black uppercase tracking-wide text-[color:var(--color-gold)]"
+                style="font-family: var(--font-display); text-shadow: 3px 3px 0 var(--color-ink);"
+              >
+                {f.title}
+              </h3>
+              <p
+                class="mt-4 text-[color:var(--color-sky-light)] leading-relaxed text-sm sm:text-base"
+                style="font-family: var(--font-body);"
+              >
+                {f.body}
+              </p>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>

@@ -1,0 +1,116 @@
+---
+import type { Release } from "../lib/releases";
+import { formatBytes } from "../lib/releases";
+import { getMilestoneNote } from "../data/milestone-versions";
+
+interface Props {
+  release: Release;
+  latestStableTag?: string;
+  highlight?: boolean;
+}
+
+const { release, latestStableTag, highlight = false } = Astro.props;
+const isLatest = release.tag_name === latestStableTag;
+const milestoneNote = getMilestoneNote(release.tag_name);
+const date = new Date(release.published_at).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<li class:list={["panel-pixel p-5", highlight && "ring-2 ring-[color:var(--color-crown)] ring-offset-2 ring-offset-[color:var(--color-bg)]"]}>
+  <div class="flex flex-wrap items-center gap-3 mb-3">
+    <span
+      class="chip-pixel bg-[color:var(--color-gold)] text-[color:var(--color-ink)]"
+      style="font-family: var(--font-display);"
+    >
+      {release.tag_name}
+    </span>
+    {isLatest && (
+      <span
+        class="chip-pixel bg-[color:var(--color-sky)] text-[color:var(--color-ink)]"
+        style="font-family: var(--font-display);"
+      >
+        Latest
+      </span>
+    )}
+    {milestoneNote && (
+      <span
+        class="chip-pixel bg-[color:var(--color-crown)] text-[color:var(--color-ink)]"
+        style="font-family: var(--font-display);"
+      >
+        ★ Milestone
+      </span>
+    )}
+    {release.prerelease && (
+      <span
+        class="chip-pixel bg-[color:var(--color-muted)] text-[color:var(--color-ink)]"
+        style="font-family: var(--font-display);"
+      >
+        Pre-release
+      </span>
+    )}
+    <time
+      class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-muted)] ml-auto"
+      style="font-family: var(--font-display);"
+    >
+      {date}
+    </time>
+  </div>
+
+  {release.name && release.name !== release.tag_name && (
+    <h3
+      class="font-bold text-base uppercase tracking-wide text-[color:var(--color-sky)] mb-2"
+      style="font-family: var(--font-display);"
+    >
+      {release.name}
+    </h3>
+  )}
+
+  {milestoneNote && (
+    <p
+      class="text-[color:var(--color-sky-light)] text-sm mb-3 leading-relaxed"
+      style="font-family: var(--font-body);"
+    >
+      {milestoneNote}
+    </p>
+  )}
+
+  <div class="flex flex-wrap gap-2 items-center">
+    {release.assets.length === 0 ? (
+      <a
+        href={release.html_url}
+        target="_blank"
+        rel="noopener"
+        class="btn-pixel btn-secondary text-xs"
+      >
+        ▶ View on GitHub
+      </a>
+    ) : (
+      release.assets.map((asset) => (
+        <a
+          href={asset.browser_download_url}
+          class={`btn-pixel ${isLatest || highlight ? "btn-primary" : "btn-secondary"} text-xs`}
+        >
+          ▼ {asset.name}
+          <span
+            class="ml-2 text-[10px] opacity-70"
+            style="font-family: var(--font-display);"
+          >
+            ({formatBytes(asset.size)})
+          </span>
+        </a>
+      ))
+    )}
+    <a
+      href={release.html_url}
+      target="_blank"
+      rel="noopener"
+      class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--color-muted)] hover:text-[color:var(--color-sky)] ml-2"
+      style="font-family: var(--font-display);"
+    >
+      Release notes →
+    </a>
+  </div>
+</li>

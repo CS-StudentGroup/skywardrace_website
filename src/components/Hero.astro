@@ -1,51 +1,63 @@
 ---
-const releaseUrl =
-  "https://github.com/Andott1/pdc_final_project/releases/latest";
+import { Image } from "astro:assets";
+import banner from "../assets/banner.png";
+import {
+  getLatestRelease,
+  LATEST_RELEASE_URL,
+} from "../lib/releases";
+
+const latest = await getLatestRelease();
+const latestTag = latest?.tag_name ?? "v0.4.8";
+const downloadUrl = latest?.html_url ?? LATEST_RELEASE_URL;
 ---
 
 <section class="relative overflow-hidden">
   <div
-    class="absolute inset-0 -z-10 opacity-60"
-    style="background: radial-gradient(60% 50% at 50% 0%, rgba(255,179,71,0.25), transparent 70%), radial-gradient(40% 40% at 80% 20%, rgba(110,168,255,0.18), transparent 70%);"
+    class="absolute inset-0 -z-10 opacity-70"
+    style="background: radial-gradient(60% 50% at 50% 10%, rgba(110,192,255,0.35), transparent 65%), radial-gradient(40% 40% at 80% 30%, rgba(255,200,61,0.18), transparent 70%);"
   >
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28 text-center">
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center">
     <p
-      class="inline-block text-xs uppercase tracking-[0.2em] text-[color:var(--color-accent)] border border-[color:var(--color-accent)]/30 rounded-full px-3 py-1 mb-6"
+      class="chip-pixel mb-6 bg-[color:var(--color-sky)] text-[color:var(--color-ink)]"
+      style="font-family: var(--font-display);"
     >
-      pygame-ce build · v1
-    </p>
-    <h1
-      class="font-[family-name:var(--font-display)] text-5xl sm:text-7xl font-bold tracking-tight"
-    >
-      Skyward Race
-    </h1>
-    <p class="mt-6 text-lg sm:text-xl text-[color:var(--color-muted)] max-w-2xl mx-auto">
-      A fast, parallel-and-distributed arcade racer built in pygame-ce.
-      Compete, spectate, climb.
+      ◆ pygame-ce build · {latestTag}
     </p>
 
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-      <a
-        href={releaseUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-flex items-center gap-2 bg-[color:var(--color-accent)] text-black font-semibold px-6 py-3 rounded-lg hover:brightness-110 transition"
-      >
-        Download latest release
-        <span aria-hidden>↗</span>
+    <Image
+      src={banner}
+      alt="Skyward Race"
+      widths={[480, 768, 1024, 1280]}
+      sizes="(max-width: 640px) 90vw, 640px"
+      class="pixelated mx-auto w-full max-w-[640px] h-auto drop-shadow-[0_8px_0_rgba(10,15,36,0.6)]"
+      loading="eager"
+    />
+
+    <h1 class="sr-only">Skyward Race</h1>
+
+    <p
+      class="mt-8 text-base sm:text-lg text-[color:var(--color-sky-light)] max-w-xl mx-auto leading-relaxed"
+      style="font-family: var(--font-body);"
+    >
+      A 2D pixel-art arcade racer. Climb, compete, claim the crown.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <a href={downloadUrl} target="_blank" rel="noopener" class="btn-pixel btn-primary">
+        ▼ Download {latestTag}
       </a>
-      <a
-        href="#about"
-        class="inline-flex items-center gap-2 border border-white/10 px-6 py-3 rounded-lg text-[color:var(--color-fg)] hover:bg-white/5 transition"
-      >
-        Learn more
+      <a href="#features" class="btn-pixel btn-secondary">
+        ▶ See features
       </a>
     </div>
 
-    <p class="mt-6 text-xs text-[color:var(--color-muted)]">
-      Windows executable · standalone build · no install required
+    <p
+      class="mt-8 text-[10px] uppercase tracking-[0.25em] text-[color:var(--color-muted)]"
+      style="font-family: var(--font-display);"
+    >
+      Windows .exe · standalone · no install
     </p>
   </div>
 </section>
